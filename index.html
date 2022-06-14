@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="main">
+      <div id="inputsection">
+        <button onclick="Translatetext()">Translate</button>
+        <textarea id="inputtext" cols="30" rows="10"></textarea>
+      </div>
+      <div id="outputsection">
+        <p id="translatedtext">outputsection</p>
+      </div>
+    </div>
+  </body>
+  <script>
+    let translatedtext = document.querySelector("#translatedtext");
+    async function Translatetext() {
+      var inputtext = document.querySelector("#inputtext").value;
+      // console.log(inputtext)
+
+      const res = await fetch("https://libretranslate.de/translate", {
+        method: "POST",
+        body: JSON.stringify({
+          q: inputtext,
+          source: "en",
+          target: "hi",
+          format: "text",
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      var data=await res.json();
+      document.querySelector("#translatedtext").innerHTML="";
+      document.querySelector("#translatedtext").append(data.translatedText)
+    //   console.log(data.translatedText);
+    }
+  </script>
+</html>
