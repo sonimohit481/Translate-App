@@ -26,7 +26,6 @@ const App = () => {
   ];
 
   useEffect(() => {
-    // Cleanup function to stop ongoing speech synthesis when the component unmounts
     return () => {
       if (speechSynthesis.speaking) {
         speechSynthesis.cancel();
