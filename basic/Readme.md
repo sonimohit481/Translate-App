@@ -1,6 +1,6 @@
 # Translate App
 
-![App Banner](https://github.com/sonimohit481/Translate-App/raw/main/Banner.png)
+![App Banner](https://github.com/sonimohit481/Translate-App/raw/main/basic/Banner.png)
 
 ## [Demo](https://simple-translate-app-01.netlify.app/)
 

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <title>Translate App</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        /* background-color: ; */
+        color: #333;
+      }
+
+      #main {
+        max-width: 700px;
+        margin: 50px auto;
+        background-color: #fefde9;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+      }
+
+      h1 {
+        text-align: center;
+        color: #4caf50;
+      }
+
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: inline-block;
+      }
+
+      select,
+      textarea,
+      button {
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      textarea {
+        width: 95%;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #3e8e41;
+      }
+
+      #outputsection {
+        margin-top: 20px;
+      }
+
+      #loading {
+        display: none;
+        text-align: center;
+        color: #4caf50;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <h1>Translate App</h1>
+      <div id="inputsection">
+        <label for="sourceLanguage">Source Language:</label>
+        <select id="sourceLanguage">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="hi">Hindi</option>
+          <option value="zh">Chinese</option>
+        </select>
+
+        <label for="targetLanguage">Target Language:</label>
+        <select id="targetLanguage">
+          <option value="hi">Hindi</option>
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="zh">Chinese</option>
+        </select>
+
+        <label for="inputtext">Enter Text:</label>
+        <textarea
+          id="inputtext"
+          placeholder="Type something to translate..."
+        ></textarea>
+
+        <button onclick="translateText()">Translate</button>
+      </div>
+
+      <div id="outputsection">
+        <p id="loading">Translating...</p>
+        <p id="translatedtext">Your translation will appear here</p>
+      </div>
+    </div>
+
+    <script>
+      async function translateText() {
+        const inputText = document.querySelector("#inputtext").value;
+        const sourceLang = document.querySelector("#sourceLanguage").value;
+        const targetLang = document.querySelector("#targetLanguage").value;
+
+        const translatedTextElement = document.querySelector("#translatedtext");
+        const loadingElement = document.querySelector("#loading");
+
+        if (!inputText) {
+          alert("Please enter text to translate.");
+          return;
+        }
+
+        translatedTextElement.textContent = "";
+        loadingElement.style.display = "block";
+
+        try {
+          const response = await fetch(
+            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+              inputText
+            )}&langpair=${sourceLang}|${targetLang}`
+          );
+          // encodeURIComponent(): This function ensures that special characters in the inputText (such as spaces, symbols, etc.) are correctly encoded for the URL. This prevents issues if the user inputs text with spaces or non-ASCII characters.
+
+          if (!response.ok) {
+            throw new Error("Translation failed. Please try again.");
+          }
+
+          const data = await response.json();
+          translatedTextElement.textContent = data.responseData.translatedText;
+        } catch (error) {
+          console.error("Error:", error.message);
+          alert("Error translating text. Please try again.");
+        } finally {
+          loadingElement.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>
